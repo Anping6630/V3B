@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DefaultRobot : MonoBehaviour
 {
@@ -8,11 +9,13 @@ public class DefaultRobot : MonoBehaviour
     public CharacterController controller;
     [Header("攝影機")]
     public GameObject robotCamera;
+    [Header("UI介面")]
+    public GameObject hackMark; 
     [Header("視角靈敏度")]
     public float mouseSensitivity;
     [Header("移動速度")]
     public float speed;
-    [Header("操作中")]
+    [Header("玩家操作中")]
     public bool isControlling;
 
     float xRotation = 0f;
@@ -24,15 +27,16 @@ public class DefaultRobot : MonoBehaviour
 
     void Update()
     {
+        robotCamera.SetActive(isControlling);
         if (isControlling)
         {
-            LookFor();
+            FirstPersonLook();
             Movement();
+            Transfer();
         }
-        robotCamera.SetActive(isControlling);
     }
 
-    void LookFor()
+    void FirstPersonLook()//第一人稱鏡頭
     {   
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
@@ -44,7 +48,7 @@ public class DefaultRobot : MonoBehaviour
         transform.Rotate(Vector3.up * mouseX);
     }
 
-    void Movement()
+    void Movement()//移動
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
@@ -52,5 +56,34 @@ public class DefaultRobot : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
 
         controller.Move(move * speed * Time.deltaTime);
+    }
+
+    void Transfer()//附身
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if(hit.collider.gameObject.tag == "Robot")
+            {
+                hackMark.SetActive(true);
+                if (Input.GetMouseButtonDown(0))
+                {
+                    isControlling = false;
+                    hackMark.SetActive(false);
+                    hit.transform.parent.gameObject.GetComponent<DefaultRobot>().isControlling = true;
+                }
+            }
+            else
+            {
+                hackMark.SetActive(false);
+            }
+        }
+        else
+        {
+            hackMark.SetActive(false);
+        }
     }
 }
