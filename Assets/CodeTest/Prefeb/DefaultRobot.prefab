@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7095477524278693325}
   - component: {fileID: 7095477524278693327}
   m_Layer: 0
-  m_Name: Test Robot
+  m_Name: DefaultRobot
   m_TagString: Robot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,6 +71,7 @@ MonoBehaviour:
   mouseSensitivity: 700
   speed: 8
   isControlling: 0
+  robotType: "\u9810\u8A2D\u6A5F\u5668\u4EBA"
 --- !u!1 &7095477524741415238
 GameObject:
   m_ObjectHideFlags: 0
