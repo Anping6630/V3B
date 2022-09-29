@@ -4,26 +4,30 @@ using UnityEngine;
 
 public class EnergyRobot : MonoBehaviour
 {
-    [Header("頭部")]
+    [Header("模型頭部")]
     public GameObject robotHead;
-    [Header("腿部")]
+    [Header("模型腿部")]
     public GameObject robotFeet;
     [Header("攝影機")]
     public GameObject robotCamera;
     [Header("視角靈敏度")]
     public float mouseSensitivity;
 
-    public GameObject[] pathPoints;
-    int nextPathPointIndex = 1;
-    int lastPathPointIndex = 0;
+    //軌道節點//
+    GameObject[] pathPoints;
+    GameObject nextPoint;
+    GameObject lastPoint;
 
+    //攝影機角度//
     float xRotation = 0f;
 
     void Start()
     {
-        pathPoints = GameObject.FindGameObjectsWithTag("PathPoint");
-        transform.position = pathPoints[0].transform.position;
-        transform.forward = pathPoints[nextPathPointIndex].transform.position - transform.position;
+        pathPoints = GameObject.FindGameObjectsWithTag("PathPoint");//抓取所有節點
+        transform.position = pathPoints[0].transform.position;//把這隻抓上起點
+
+        nextPoint = pathPoints[1];
+        lastPoint = pathPoints[0];
     }
 
     void Update()
@@ -46,41 +50,96 @@ public class EnergyRobot : MonoBehaviour
 
     void Movement()//軌道移動
     {
-        if (Vector3.Distance(pathPoints[nextPathPointIndex].transform.position, transform.position) < 0.1f && Input.GetKey("w"))
-        {
-            if (nextPathPointIndex != pathPoints.Length - 1)
-            {
-                nextPathPointIndex++;
-                lastPathPointIndex++;
-            }
-            if (Vector3.Distance(pathPoints[pathPoints.Length - 1].transform.position, transform.position) < 0.1f)
-            {
-                transform.position = pathPoints[pathPoints.Length - 1].transform.position;
-                return;
-            }
-            transform.forward = pathPoints[nextPathPointIndex].transform.position - transform.position;
-        }
-        if (Vector3.Distance(pathPoints[lastPathPointIndex].transform.position, transform.position) < 0.1f && Input.GetKey("s"))
-        {
-            if (nextPathPointIndex != 0)
-            {
-                nextPathPointIndex--;
-                lastPathPointIndex--;
-            }
-            if (Vector3.Distance(pathPoints[pathPoints.Length - 1].transform.position, transform.position) < 0.1f)
-            {
-                transform.position = pathPoints[pathPoints.Length - 1].transform.position;
-                return;
-            }
-            transform.forward = -(pathPoints[lastPathPointIndex].transform.position - transform.position);
-        }
+        float a = Vector3.Dot(robotCamera.transform.forward.normalized, (nextPoint.transform.position - transform.position).normalized);//視野方向與下個節點的夾角
+        float b = Vector3.Dot(robotCamera.transform.forward.normalized, (lastPoint.transform.position - transform.position).normalized);//視野方向與上個節點的夾角
+
         if (Input.GetKey("w"))
         {
-            transform.Translate(Vector3.forward * 10 * Time.deltaTime, Space.Self);
+            if (a > b)//向鏡頭朝向的節點移動
+            {
+                FindPath(true);
+                transform.Translate((nextPoint.transform.position - transform.position).normalized * 10 * Time.deltaTime, Space.World);
+            }
+            else
+            {
+                FindPath(true);
+                transform.Translate((lastPoint.transform.position - transform.position).normalized * 10 * Time.deltaTime, Space.World);
+            }
         }
         if (Input.GetKey("s"))
         {
-            transform.Translate(Vector3.back * 10 * Time.deltaTime, Space.Self);
+            if (a < b)//向鏡頭背對的節點移動
+            {
+                FindPath(false);
+                transform.Translate((nextPoint.transform.position - transform.position).normalized * 10 * Time.deltaTime, Space.World);
+            }
+            else
+            {
+                FindPath(false);
+                transform.Translate((lastPoint.transform.position - transform.position).normalized * 10 * Time.deltaTime, Space.World);
+            }
+        }
+    }
+
+    void FindPath(bool isForward)//尋找下一個節點
+    {
+        if (Vector3.Distance(nextPoint.transform.position, transform.position) < 0.1f)
+        {
+            lastPoint = nextPoint;
+            GameObject maxTarget = nextPoint.GetComponent<PathPoint>().connectingPoints[0];
+            GameObject minTarget = maxTarget;
+            float max = Vector3.Dot(robotCamera.transform.forward.normalized, (nextPoint.GetComponent<PathPoint>().connectingPoints[0].transform.position - transform.position).normalized);
+            float min = max;
+            for (int i = 0; i < nextPoint.GetComponent<PathPoint>().connectingPoints.Length; i++)
+            {
+                if (Vector3.Dot(robotCamera.transform.forward.normalized, (nextPoint.GetComponent<PathPoint>().connectingPoints[i].transform.position - transform.position).normalized) >= max)
+                {
+                    max = Vector3.Dot(robotCamera.transform.forward.normalized, (nextPoint.GetComponent<PathPoint>().connectingPoints[i].transform.position - transform.position).normalized);
+                    maxTarget = nextPoint.GetComponent<PathPoint>().connectingPoints[i];
+                }
+                if (Vector3.Dot(robotCamera.transform.forward.normalized, (nextPoint.GetComponent<PathPoint>().connectingPoints[i].transform.position - transform.position).normalized) <= min)
+                {
+                    min = Vector3.Dot(robotCamera.transform.forward.normalized, (nextPoint.GetComponent<PathPoint>().connectingPoints[i].transform.position - transform.position).normalized);
+                    minTarget = nextPoint.GetComponent<PathPoint>().connectingPoints[i];
+                }
+            }
+            if (isForward)
+            {
+                nextPoint = maxTarget;
+            }
+            else
+            {
+                nextPoint = minTarget;
+            }
+        }
+        if (Vector3.Distance(lastPoint.transform.position, transform.position) < 0.1f)
+        {
+            nextPoint = lastPoint;
+            GameObject maxTarget = lastPoint.GetComponent<PathPoint>().connectingPoints[0];
+            GameObject minTarget = maxTarget;
+            float max = Vector3.Dot(robotCamera.transform.forward.normalized, (lastPoint.GetComponent<PathPoint>().connectingPoints[0].transform.position - transform.position).normalized);
+            float min = max;
+            for (int i = 0; i < lastPoint.GetComponent<PathPoint>().connectingPoints.Length; i++)
+            {
+                if (Vector3.Dot(robotCamera.transform.forward.normalized, (lastPoint.GetComponent<PathPoint>().connectingPoints[i].transform.position - transform.position).normalized) >= max)
+                {
+                    max = Vector3.Dot(robotCamera.transform.forward.normalized, (lastPoint.GetComponent<PathPoint>().connectingPoints[i].transform.position - transform.position).normalized);
+                    maxTarget = lastPoint.GetComponent<PathPoint>().connectingPoints[i];
+                }
+                if (Vector3.Dot(robotCamera.transform.forward.normalized, (lastPoint.GetComponent<PathPoint>().connectingPoints[i].transform.position - transform.position).normalized) <= min)
+                {
+                    min = Vector3.Dot(robotCamera.transform.forward.normalized, (lastPoint.GetComponent<PathPoint>().connectingPoints[i].transform.position - transform.position).normalized);
+                    minTarget = lastPoint.GetComponent<PathPoint>().connectingPoints[i];
+                }
+            }
+            if (isForward)
+            {
+                lastPoint = maxTarget;
+            }
+            else
+            {
+                lastPoint = minTarget;
+            }
         }
     }
 }
