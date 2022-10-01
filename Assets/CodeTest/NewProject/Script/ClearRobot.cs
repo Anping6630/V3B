@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnergyRobot : MonoBehaviour
+public class ClearRobot : MonoBehaviour
 {
     [Header("模型頭部")]
     public GameObject robotHead;
@@ -19,6 +19,9 @@ public class EnergyRobot : MonoBehaviour
     GameObject[] pathPoints;
     GameObject nextPoint;
     GameObject lastPoint;
+
+    //清道機器人//
+    bool isLookingForward = true;
 
     //攝影機角度//
     float xRotation = 0f;
@@ -37,6 +40,11 @@ public class EnergyRobot : MonoBehaviour
     {
         FirstPersonLook();
         Movement();
+
+        if (Input.GetKeyDown("q"))
+        {
+            isLookingForward = !isLookingForward;
+        }
     }
 
     void FirstPersonLook()//第一人稱鏡頭
@@ -53,8 +61,27 @@ public class EnergyRobot : MonoBehaviour
 
     void Movement()//軌道移動
     {
+        FindPath(true);
+        if (isLookingForward)
+        {
+            transform.Translate((nextPoint.transform.position - transform.position).normalized * moveSpeed * Time.deltaTime, Space.World);
+        }
+        else
+        {
+            transform.Translate((lastPoint.transform.position - transform.position).normalized * moveSpeed * Time.deltaTime, Space.World);
+        }
         float a = Vector3.Dot(robotCamera.transform.forward.normalized, (nextPoint.transform.position - transform.position).normalized);//視野方向與下個節點的夾角
         float b = Vector3.Dot(robotCamera.transform.forward.normalized, (lastPoint.transform.position - transform.position).normalized);//視野方向與上個節點的夾角
+
+        if (Input.GetKey("a") && moveSpeed<15)
+        {
+            moveSpeed += 1;
+        }
+        if (moveSpeed > 0.1f)
+        {
+            moveSpeed -= 0.05f;
+        }
+
 
         if (Input.GetKey("w"))
         {
