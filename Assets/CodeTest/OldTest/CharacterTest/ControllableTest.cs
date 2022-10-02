@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Controllable : MonoBehaviour
+public class ControllableTest : MonoBehaviour
 {
     [Header("UI介面")]
     public GameObject hackMark;
@@ -29,7 +29,7 @@ public class Controllable : MonoBehaviour
                 {
                     isControlling = false;
                     hackMark.SetActive(false);
-                    hit.transform.parent.gameObject.GetComponent<Controllable>().isControlling = true;
+                    //hit.transform.parent.gameObject.GetComponent<Controllable>().isControlling = true;
                 }
             }
             else

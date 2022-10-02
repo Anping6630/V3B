@@ -27,7 +27,7 @@ public class EnergyRobot : MonoBehaviour
     {
         pathPoints = GameObject.FindGameObjectsWithTag("PathPoint");//抓取所有節點
 
-        int Ahoy = Random.Range(0, pathPoints.Length - 1);//扔上隨機起點(記得刪掉嘿
+        int Ahoy = Random.Range(0, pathPoints.Length - 1);//隨機扔上某個地方(記得刪掉
         transform.position = pathPoints[Ahoy].transform.position;
         nextPoint = pathPoints[Ahoy];
         lastPoint = pathPoints[Ahoy].GetComponent<PathPoint>().connectingPoints[0];
@@ -51,7 +51,7 @@ public class EnergyRobot : MonoBehaviour
         robotHead.transform.Rotate(Vector3.up * mouseX);
     }
 
-    void Movement()//軌道移動
+    void Movement()//軌道移動(WS前後)
     {
         float a = Vector3.Dot(robotCamera.transform.forward.normalized, (nextPoint.transform.position - transform.position).normalized);//視野方向與下個節點的夾角
         float b = Vector3.Dot(robotCamera.transform.forward.normalized, (lastPoint.transform.position - transform.position).normalized);//視野方向與上個節點的夾角
@@ -84,7 +84,7 @@ public class EnergyRobot : MonoBehaviour
         }
     }
 
-    void FindPath(bool isForward)//尋找下一個節點
+    void FindPath(bool isForward)//尋找下一個節點(以鏡頭朝向)
     {
         if (Vector3.Distance(nextPoint.transform.position, transform.position) < 0.1f)
         {

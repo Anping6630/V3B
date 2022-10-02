@@ -29,8 +29,8 @@ public class PathTest : MonoBehaviour
 
     void Update()
     {
-        robotCamera.SetActive(this.GetComponent<Controllable>().isControlling);
-        if (this.GetComponent<Controllable>().isControlling)
+        //robotCamera.SetActive(this.GetComponent<Controllable>().isControlling);
+        //if (this.GetComponent<Controllable>().isControlling)
         {
             FirstPersonLook();
             Movement();
