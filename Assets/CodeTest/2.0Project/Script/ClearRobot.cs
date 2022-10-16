@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnergyRobot : MonoBehaviour
+public class ClearRobot : MonoBehaviour
 {
     [Header("模型頭部")]
     public GameObject robotHead;
@@ -15,10 +15,15 @@ public class EnergyRobot : MonoBehaviour
     [Header("移動速度")]
     public float moveSpeed;
 
+    public bool isAct;
+
     //軌道節點//
     GameObject[] pathPoints;
     GameObject nextPoint;
     GameObject lastPoint;
+
+    //清道機器人//
+    bool isLookingForward = true;
 
     //攝影機角度//
     float xRotation = 0f;
@@ -27,7 +32,7 @@ public class EnergyRobot : MonoBehaviour
     {
         pathPoints = GameObject.FindGameObjectsWithTag("PathPoint");//抓取所有節點
 
-        int Ahoy = Random.Range(0, pathPoints.Length - 1);//隨機扔上某個地方(記得刪掉
+        int Ahoy = Random.Range(0, pathPoints.Length - 1);//扔上隨機起點(記得刪掉嘿
         transform.position = pathPoints[Ahoy].transform.position;
         nextPoint = pathPoints[Ahoy];
         lastPoint = pathPoints[Ahoy].GetComponent<PathPoint>().connectingPoints[0];
@@ -35,8 +40,17 @@ public class EnergyRobot : MonoBehaviour
 
     void Update()
     {
-        FirstPersonLook();
-        Movement();
+        if (isAct)
+        {
+            FirstPersonLook();
+            Movement();
+
+            if (Input.GetKeyDown("q"))
+            {
+                isLookingForward = !isLookingForward;
+            }
+        }
+
     }
 
     void FirstPersonLook()//第一人稱鏡頭
@@ -51,10 +65,29 @@ public class EnergyRobot : MonoBehaviour
         robotHead.transform.Rotate(Vector3.up * mouseX);
     }
 
-    void Movement()//軌道移動(WS前後)
+    void Movement()//軌道移動
     {
+        FindPath(true);
+        if (isLookingForward)
+        {
+            transform.Translate((nextPoint.transform.position - transform.position).normalized * moveSpeed * Time.deltaTime, Space.World);
+        }
+        else
+        {
+            transform.Translate((lastPoint.transform.position - transform.position).normalized * moveSpeed * Time.deltaTime, Space.World);
+        }
         float a = Vector3.Dot(robotCamera.transform.forward.normalized, (nextPoint.transform.position - transform.position).normalized);//視野方向與下個節點的夾角
         float b = Vector3.Dot(robotCamera.transform.forward.normalized, (lastPoint.transform.position - transform.position).normalized);//視野方向與上個節點的夾角
+
+        if (Input.GetKey("a") && moveSpeed<15)
+        {
+            moveSpeed += 1;
+        }
+        if (moveSpeed > 0.1f)
+        {
+            moveSpeed -= 0.05f;
+        }
+
 
         if (Input.GetKey("w"))
         {
@@ -84,7 +117,7 @@ public class EnergyRobot : MonoBehaviour
         }
     }
 
-    void FindPath(bool isForward)//尋找下一個節點(以鏡頭朝向)
+    void FindPath(bool isForward)//尋找下一個節點
     {
         if (Vector3.Distance(nextPoint.transform.position, transform.position) < 0.1f)
         {

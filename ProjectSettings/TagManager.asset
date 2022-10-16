@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Robot
   - PathPoint
+  - ChargingPort
   layers:
   - Default
   - TransparentFX
