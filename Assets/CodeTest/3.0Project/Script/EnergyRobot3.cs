@@ -6,10 +6,6 @@ public class EnergyRobot3 : MonoBehaviour
 {
     [Header("角色控制器")]
     public CharacterController controller;
-    [Header("模型頭部")]
-    public GameObject robotHead;
-    [Header("模型腿部")]
-    public GameObject robotFeet;
     [Header("攝影機")]
     public Camera robotCamera;
     [Header("視角靈敏度")]
@@ -17,23 +13,31 @@ public class EnergyRobot3 : MonoBehaviour
     [Header("移動速度")]
     public float moveSpeed;
 
-    public bool isAct;
+    //玩家是否操作其他機器人中//
+    public GameObject ControllingRobot = null;
 
     //攝影機角度//
     float xRotation = 0f;
 
     void Start()
     {
-
+        
     }
 
     void Update()
     {
-        if (isAct)
+        if (ControllingRobot == null)//沒有操作其他機器人時
         {
             FirstPersonLook();
             Movement();
             AimPoint();
+        }
+        else
+        {
+            if (Input.GetKeyDown("f"))//按F取消附身
+            {
+                ControllingRobot = null;
+            }
         }
 
     }
@@ -72,7 +76,7 @@ public class EnergyRobot3 : MonoBehaviour
                 case "Robot":
                     if (Input.GetMouseButtonDown(0))
                     {
-                        print("附身");
+                        Transfer(hit.collider.gameObject);
                     }
                     break;
                 case "ChargingPort":
@@ -83,5 +87,11 @@ public class EnergyRobot3 : MonoBehaviour
                     break;
             }
         }
+    }
+
+    void Transfer(GameObject target)//附身
+    {
+        target.GetComponent<Controllable>().Transfer();
+        ControllingRobot = target;
     }
 }

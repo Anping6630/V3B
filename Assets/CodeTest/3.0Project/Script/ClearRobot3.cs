@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearRobot2 : MonoBehaviour
+public class ClearRobot3 : MonoBehaviour
 {
     [Header("模型頭部")]
     public GameObject robotHead;
@@ -79,7 +79,7 @@ public class ClearRobot2 : MonoBehaviour
         float a = Vector3.Dot(robotCamera.transform.forward.normalized, (nextPoint.transform.position - transform.position).normalized);//視野方向與下個節點的夾角
         float b = Vector3.Dot(robotCamera.transform.forward.normalized, (lastPoint.transform.position - transform.position).normalized);//視野方向與上個節點的夾角
 
-        if (Input.GetKey("a") && moveSpeed<15)
+        if (Input.GetKey("a") && moveSpeed < 15)
         {
             moveSpeed += 1;
         }

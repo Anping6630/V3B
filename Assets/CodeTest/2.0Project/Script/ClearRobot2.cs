@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearRobot2 : MonoBehaviour
+public class ClearRobot : MonoBehaviour
 {
     [Header("模型頭部")]
     public GameObject robotHead;
