@@ -40,7 +40,7 @@ public class EnergyRobot3 : MonoBehaviour
         laserLine = energyGun.GetComponent<LineRenderer>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (ControllingRobot == null)//沒有操作其他機器人時
         {
