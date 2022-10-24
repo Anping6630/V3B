@@ -18,7 +18,22 @@ ModelImporter:
   - first:
       74: -198088216074593386
     second: door_arm|opening_door_open
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BLACKLINE'
+    second: {fileID: 2100000, guid: ed3f3962acedc1740b5048702576654a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: LIGHTFRAY
+    second: {fileID: 2100000, guid: 20cf60f3b908a60489d809b1cd23a89e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WHITE
+    second: {fileID: 2100000, guid: 9b3789d64247cab4eb946ca8baf5d169, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
