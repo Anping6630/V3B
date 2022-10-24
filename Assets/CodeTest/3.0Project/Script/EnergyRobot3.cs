@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnergyRobot3 : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class EnergyRobot3 : MonoBehaviour
     public float mouseSensitivity;
     [Header("移動速度")]
     public float moveSpeed;
+    [Header("準心UI")]
+    public GameObject aimPoint;
 
     //玩家是否操作其他機器人中//
     public GameObject ControllingRobot = null;
@@ -19,9 +22,22 @@ public class EnergyRobot3 : MonoBehaviour
     //攝影機角度//
     float xRotation = 0f;
 
-    void Start()
+    [Header("能源發射點")]
+    public Transform energyOrigin;
+    [Header("能源槍模型")]
+    public GameObject energyGun;
+    public float gunRange = 50f;
+    public float fireRate = 0.2f;
+    public float laserDuration = 0.05f;
+
+    LineRenderer laserLine;
+    float fireTimer;
+
+
+
+    void Awake()
     {
-        
+        laserLine = energyGun.GetComponent<LineRenderer>();
     }
 
     void Update()
@@ -31,6 +47,7 @@ public class EnergyRobot3 : MonoBehaviour
             FirstPersonLook();
             Movement();
             AimPoint();
+            InfuseEnergy();
         }
         else
         {
@@ -39,7 +56,6 @@ public class EnergyRobot3 : MonoBehaviour
                 ControllingRobot = null;
             }
         }
-
     }
 
     void FirstPersonLook()//第一人稱鏡頭
@@ -66,6 +82,25 @@ public class EnergyRobot3 : MonoBehaviour
 
     void AimPoint()//準心偵測
     {
+        //臨時用開鏡瞄準//
+        if (Input.GetMouseButton(1))
+        {
+            aimPoint.SetActive(true);
+            if(robotCamera.fieldOfView > 30)
+            {
+                robotCamera.fieldOfView-=0.5f;
+            }
+        }
+        else
+        {
+            aimPoint.SetActive(false);
+            if (robotCamera.fieldOfView < 60)
+            {
+                robotCamera.fieldOfView+=0.5f;
+            }
+        }
+
+
         Ray ray = robotCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
 
@@ -88,6 +123,48 @@ public class EnergyRobot3 : MonoBehaviour
             }
         }
     }
+
+    void InfuseEnergy()//灌注能源
+    {
+        fireTimer += Time.deltaTime;
+
+        if (Input.GetMouseButtonUp(1) && fireTimer > fireRate)
+        {
+            fireTimer = 0;
+
+            laserLine.SetPosition(0, energyOrigin.position);
+            Vector3 rayOrigin = robotCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit hit;
+            if (Physics.Raycast(rayOrigin, robotCamera.transform.forward, out hit, gunRange))
+            {
+                laserLine.SetPosition(1, hit.point);
+                print(hit.transform.gameObject);
+                switch (hit.transform.gameObject.tag)
+                {
+                    case "Robot":
+                        Transfer(hit.collider.gameObject);
+                        break;
+
+                    case "ChargingPort":
+                        hit.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
+                        break;
+                }
+            }
+            else
+            {
+                laserLine.SetPosition(1, rayOrigin + (robotCamera.transform.forward * gunRange));
+            }
+            StartCoroutine(ShootEnergy());
+        }
+    }
+
+    IEnumerator ShootEnergy()//發射能源光束
+    {
+        laserLine.enabled = true;
+        yield return new WaitForSeconds(laserDuration);
+        laserLine.enabled = false;
+    }
+
 
     void Transfer(GameObject target)//附身
     {
