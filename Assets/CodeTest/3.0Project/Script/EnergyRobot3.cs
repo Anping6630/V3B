@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class EnergyRobot3 : MonoBehaviour
 {
+    //附身機制改按鍵時記得檢查兩個機器人
+
     [Header("角色控制器")]
     public CharacterController controller;
     [Header("攝影機")]
@@ -16,11 +18,8 @@ public class EnergyRobot3 : MonoBehaviour
     [Header("準心UI")]
     public GameObject aimPoint;
 
-    //玩家是否操作其他機器人中//
+    //玩家是否操作其他機器人中(測試中功能)//
     public GameObject ControllingRobot = null;
-
-    //攝影機角度//
-    float xRotation = 0f;
 
     [Header("能源發射點")]
     public Transform energyOrigin;
@@ -30,17 +29,19 @@ public class EnergyRobot3 : MonoBehaviour
     public float fireRate = 0.2f;
     public float laserDuration = 0.05f;
 
+    //攝影機//
+    float xRotation = 0f;
+    //灌注能源//
     LineRenderer laserLine;
-    float fireTimer;
-
-
+    float infuseTimer;
 
     void Awake()
     {
         laserLine = energyGun.GetComponent<LineRenderer>();
+        laserLine.enabled = false;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (ControllingRobot == null)//沒有操作其他機器人時
         {
@@ -126,27 +127,27 @@ public class EnergyRobot3 : MonoBehaviour
 
     void InfuseEnergy()//灌注能源
     {
-        fireTimer += Time.deltaTime;
+        infuseTimer += Time.deltaTime;
+        laserLine.SetPosition(0, energyOrigin.position);
 
-        if (Input.GetMouseButtonUp(1) && fireTimer > fireRate)
+        if (Input.GetMouseButtonUp(1) && infuseTimer > fireRate)
         {
-            fireTimer = 0;
+            infuseTimer = 0;
 
-            laserLine.SetPosition(0, energyOrigin.position);
             Vector3 rayOrigin = robotCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hit;
             if (Physics.Raycast(rayOrigin, robotCamera.transform.forward, out hit, gunRange))
             {
                 laserLine.SetPosition(1, hit.point);
-                print(hit.transform.gameObject);
+
                 switch (hit.transform.gameObject.tag)
                 {
-                    case "Robot":
+                    case "Robot"://命中機器人
                         Transfer(hit.collider.gameObject);
                         break;
 
-                    case "ChargingPort":
-                        hit.transform.gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
+                    case "ChargingPort"://命中能源孔
+                        hit.collider.gameObject.GetComponent<ChargingPort>().Charge();
                         break;
                 }
             }
