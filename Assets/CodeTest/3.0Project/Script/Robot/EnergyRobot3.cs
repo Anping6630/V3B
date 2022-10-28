@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class EnergyRobot3 : MonoBehaviour
@@ -149,6 +150,10 @@ public class EnergyRobot3 : MonoBehaviour
                     case "ChargingPort"://命中能源孔
                         hit.collider.gameObject.GetComponent<ChargingPort>().Charge();
                         break;
+                }
+                if(hit.collider.gameObject.layer == LayerMask.NameToLayer("UI"))//按下按鈕
+                {
+                    ExecuteEvents.Execute<IPointerClickHandler>(hit.collider.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
                 }
             }
             else

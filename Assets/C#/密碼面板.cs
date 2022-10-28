@@ -23,6 +23,7 @@ public class 密碼面板 : MonoBehaviour
         if (resultText.text == "4591")
         {
             resultText.text = "pass";//門會打開
+            GameObject.Find("LightingRobot").GetComponent<LightingRobot>().PowerUp();//啟動照明機器人
         }
     }
     // Start is called before the first frame update

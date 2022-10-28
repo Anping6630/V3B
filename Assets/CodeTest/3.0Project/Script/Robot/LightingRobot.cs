@@ -12,7 +12,13 @@ public class LightingRobot : MonoBehaviour
     public float mouseSensitivity;
     [Header("移動速度")]
     public float moveSpeed;
+    [Header("密碼輸入面板")]
+    public GameObject inputPanel;
+    [Header("摩斯密碼表")]
+    public GameObject morseCodePanel;
 
+    //是否能夠被操縱//
+    public bool isControllable;
     //正在操作此機器人//
     bool isControlling;
     //能源機器人攝影機//
@@ -23,12 +29,26 @@ public class LightingRobot : MonoBehaviour
     void Start()
     {
         isControlling = false;
+        isControllable = false;
         robotCamera.gameObject.SetActive(false);
         energyRobotCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
     }
 
     void Update()
     {
+        if (!isControllable)
+        {
+            if(Vector3.Distance(energyRobotCamera.transform.position, transform.position) < 7)
+            {
+                inputPanel.SetActive(true);
+                morseCodePanel.SetActive(true);
+            }
+            else
+            {
+                inputPanel.SetActive(false);
+                morseCodePanel.SetActive(false);
+            }
+        }
         if (isControlling)
         {
             FirstPersonLook();
@@ -65,5 +85,11 @@ public class LightingRobot : MonoBehaviour
         isControlling = isTransferred;
         robotCamera.gameObject.SetActive(isTransferred);
         energyRobotCamera.gameObject.SetActive(!isTransferred);
+    }
+
+    public void PowerUp()//摩斯密碼正確，改為可以被附身
+    {
+        isControllable = true;
+        this.tag = "Robot";
     }
 }

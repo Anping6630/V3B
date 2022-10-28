@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class FloatingPanel : MonoBehaviour
 {
-    public Transform camera;//主相機
+    public Camera energyRobotCamera;//能源機器人相機
 
-    void Start()
+    void Awake()
     {
-        
+        energyRobotCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
     }
 
 
     void Update()
     {
-        transform.LookAt(new Vector3(-camera.position.x + transform.position.x * 2, transform.position.y, -camera.position.z + transform.position.z * 2));//始終面對玩家
+        //始終面對玩家//
+        transform.LookAt(new Vector3(-energyRobotCamera.transform.position.x + transform.position.x * 2, transform.position.y, -energyRobotCamera.transform.position.z + transform.position.z * 2));
     }
 
     public void Ahoy()
