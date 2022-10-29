@@ -57,12 +57,11 @@ public class LightingRobot : MonoBehaviour
         {
             FirstPersonLook();
             Movement();
-            if (Input.GetKeyDown("f"))//按F取消附身
+            if (Input.GetKeyDown("q"))//按Q取消附身
             {
                 Transferred(false);
             }
         }
-
     }
 
     void FirstPersonLook()//第一人稱鏡頭
@@ -81,6 +80,7 @@ public class LightingRobot : MonoBehaviour
         this.transform.Rotate(0f, Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime*20 ,0f);
 
         Vector3 move = transform.forward * z;
+        move.y -= 20f * Time.deltaTime;
         controller.Move(move * moveSpeed * Time.deltaTime);
     }
 

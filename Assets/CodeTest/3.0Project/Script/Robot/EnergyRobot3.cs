@@ -53,7 +53,7 @@ public class EnergyRobot3 : MonoBehaviour
         }
         else
         {
-            if (Input.GetKeyDown("f"))//按F取消附身
+            if (Input.GetKeyDown("q"))//按Q取消附身
             {
                 ControllingRobot = null;
             }
@@ -78,6 +78,7 @@ public class EnergyRobot3 : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right * x + transform.forward * z;
+        move.y -= 20f * Time.deltaTime;
 
         controller.Move(move * moveSpeed * Time.deltaTime);
     }
