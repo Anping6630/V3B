@@ -18,7 +18,7 @@ public class LightingRobot : MonoBehaviour
     public GameObject morseCodePanel;
 
     //是否能夠被操縱//
-    public bool isControllable;
+    bool isControllable;
     //正在操作此機器人//
     bool isControlling;
     //能源機器人攝影機//
