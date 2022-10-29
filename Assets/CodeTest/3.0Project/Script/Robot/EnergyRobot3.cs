@@ -48,7 +48,7 @@ public class EnergyRobot3 : MonoBehaviour
         {
             FirstPersonLook();
             Movement();
-            AimPoint();
+            Aim();
             InfuseEnergy();
         }
         else
@@ -82,9 +82,8 @@ public class EnergyRobot3 : MonoBehaviour
         controller.Move(move * moveSpeed * Time.deltaTime);
     }
 
-    void AimPoint()//準心偵測
+    void Aim()//臨時用開鏡瞄準
     {
-        //臨時用開鏡瞄準//
         if (Input.GetMouseButton(1))
         {
             aimPoint.SetActive(true);
@@ -101,29 +100,6 @@ public class EnergyRobot3 : MonoBehaviour
                 robotCamera.fieldOfView+=0.5f;
             }
         }
-
-
-        Ray ray = robotCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
-        {
-            switch (hit.collider.gameObject.tag)
-            {
-                case "Robot":
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        Transfer(hit.collider.gameObject);
-                    }
-                    break;
-                case "ChargingPort":
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        print("開門");
-                    }
-                    break;
-            }
-        }
     }
 
     void InfuseEnergy()//灌注能源
@@ -131,7 +107,7 @@ public class EnergyRobot3 : MonoBehaviour
         infuseTimer += Time.deltaTime;
         laserLine.SetPosition(0, energyOrigin.position);
 
-        if (Input.GetMouseButtonUp(1) && infuseTimer > fireRate)
+        if (Input.GetMouseButtonDown(0) && infuseTimer > fireRate)
         {
             infuseTimer = 0;
 
@@ -145,6 +121,7 @@ public class EnergyRobot3 : MonoBehaviour
                 {
                     case "Robot"://命中機器人
                         Transfer(hit.collider.gameObject);
+                        aimPoint.SetActive(false);
                         break;
 
                     case "ChargingPort"://命中能源孔

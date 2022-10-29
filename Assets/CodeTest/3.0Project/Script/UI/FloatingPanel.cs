@@ -11,15 +11,9 @@ public class FloatingPanel : MonoBehaviour
         energyRobotCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
     }
 
-
     void Update()
     {
         //始終面對玩家//
         transform.LookAt(new Vector3(-energyRobotCamera.transform.position.x + transform.position.x * 2, transform.position.y, -energyRobotCamera.transform.position.z + transform.position.z * 2));
-    }
-
-    public void Ahoy()
-    {
-        print("Ahoy♡");
     }
 }

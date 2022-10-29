@@ -28,6 +28,10 @@ public class LightingRobot : MonoBehaviour
 
     void Start()
     {
+        //鎖滑鼠//
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
         isControlling = false;
         isControllable = false;
         robotCamera.gameObject.SetActive(false);
@@ -91,5 +95,7 @@ public class LightingRobot : MonoBehaviour
     {
         isControllable = true;
         this.tag = "Robot";
+        inputPanel.SetActive(false);
+        morseCodePanel.SetActive(false);
     }
 }
