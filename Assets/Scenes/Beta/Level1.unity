@@ -3815,11 +3815,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1601108452127550687, guid: 2ddeecf146474404ab3f4704adc0ebba, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.47
+      value: -0.52
       objectReference: {fileID: 0}
     - target: {fileID: 1601108452127550687, guid: 2ddeecf146474404ab3f4704adc0ebba, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.48
+      value: -0.11
       objectReference: {fileID: 0}
     - target: {fileID: 1601108452127550687, guid: 2ddeecf146474404ab3f4704adc0ebba, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5328,6 +5328,15 @@ LineRenderer:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.40625
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -5335,16 +5344,16 @@ LineRenderer:
       serializedVersion: 2
       key0: {r: 0.96098113, g: 1, b: 0, a: 1}
       key1: {r: 0.96098113, g: 1, b: 0, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0}
-      key3: {r: 0, g: 0, b: 0, a: 0}
+      key2: {r: 0.96098113, g: 1, b: 0, a: 0}
+      key3: {r: 0.96703994, g: 1, b: 0.15565728, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
       ctime1: 65535
-      ctime2: 0
-      ctime3: 0
+      ctime2: 9830
+      ctime3: 35659
       ctime4: 0
       ctime5: 0
       ctime6: 0
@@ -6150,14 +6159,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.36663815, b: 0.8962264, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: d53a01cf8afc8d542860613851c63162, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 182cd0615797d0e4d81d967793754640, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6176,7 +6185,7 @@ RectTransform:
   m_GameObject: {fileID: 5073147505904005880}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.24285, y: 0.24285, z: 0.24285}
   m_Children: []
   m_Father: {fileID: 5073147506904905497}
   m_RootOrder: 0
@@ -6184,7 +6193,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 131.8784, y: 131.8784}
+  m_SizeDelta: {x: 577, y: 432}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5073147505904005885
 CanvasRenderer:

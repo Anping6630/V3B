@@ -127,6 +127,8 @@ public class EnergyRobot3 : MonoBehaviour
 
                     case "ChargingPort"://命中能源孔
                         hit.collider.gameObject.GetComponent<ChargingPort>().Charge();
+                        hit.collider.gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
+
                         break;
                 }
                 if(hit.collider.gameObject.layer == LayerMask.NameToLayer("UI"))//按下按鈕
