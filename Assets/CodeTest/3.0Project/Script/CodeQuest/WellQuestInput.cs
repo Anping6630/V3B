@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class 終點大門密碼 : MonoBehaviour
+public class WellQuestInput : MonoBehaviour
 {
     public Text resultText;//名稱自訂
     public Button EnterButton;
     public int correctAnswer = 2649;
+
+    [Header("終點大門")]
+    public Animator relatedObject;
     // Start is called before the first frame update
     public void OnNumberClick(int number)//OnNumberClick名稱自訂
     {
@@ -22,6 +25,7 @@ public class 終點大門密碼 : MonoBehaviour
         if(resultText.text=="2649")
         {
             resultText.text = "pass";//門打開
+            relatedObject.SetBool("isEnable", true);
         }
     }
     void Start()

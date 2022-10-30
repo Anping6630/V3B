@@ -12,6 +12,8 @@ public class LightingRobot : MonoBehaviour
     public float mouseSensitivity;
     [Header("移動速度")]
     public float moveSpeed;
+    [Header("頭燈")]
+    public GameObject robotLight;
     [Header("密碼輸入面板")]
     public GameObject inputPanel;
     [Header("摩斯密碼表")]
@@ -32,6 +34,7 @@ public class LightingRobot : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
+        robotLight.SetActive(false);
         isControlling = false;
         isControllable = false;
         robotCamera.gameObject.SetActive(false);
@@ -94,6 +97,7 @@ public class LightingRobot : MonoBehaviour
     public void PowerUp()//摩斯密碼正確，改為可以被附身
     {
         isControllable = true;
+        robotLight.SetActive(true);
         this.tag = "Robot";
         inputPanel.SetActive(false);
         morseCodePanel.SetActive(false);

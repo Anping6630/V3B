@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class 密碼面板 : MonoBehaviour
+
+public class MorseQuestInput : MonoBehaviour
 {
     public Text resultText;//resultText名稱自訂
     public Button EnterButton;
