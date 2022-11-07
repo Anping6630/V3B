@@ -8,6 +8,8 @@ TagManager:
   - PathPoint
   - ChargingPort
   - Camera
+  - Normal
+  - Node
   layers:
   - Default
   - TransparentFX
