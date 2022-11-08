@@ -10,6 +10,8 @@ TagManager:
   - Camera
   - Normal
   - Node
+  - Repairing
+  - Repaired
   layers:
   - Default
   - TransparentFX

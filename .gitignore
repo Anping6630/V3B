@@ -58,3 +58,16 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+Assets/CodeTest/4.0Sumeru.meta
+Assets/CodeTest/4.0Sumeru/GlowingCube.shadergraph
+Assets/CodeTest/4.0Sumeru/GlowingCube.shadergraph.meta
+Assets/CodeTest/4.0Sumeru/GlowingCube_M.mat
+Assets/CodeTest/4.0Sumeru/GlowingCube_M.mat.meta
+Assets/CodeTest/4.0Sumeru/UniversalRenderPipelineAsset.asset
+Assets/CodeTest/4.0Sumeru/UniversalRenderPipelineAsset.asset.meta
+Assets/CodeTest/4.0Sumeru/UniversalRenderPipelineAsset_Renderer.asset
+Assets/CodeTest/4.0Sumeru/UniversalRenderPipelineAsset_Renderer.asset.meta
+Assets/Scenes/Alpha/Sumeru.unity
+Assets/Scenes/Alpha/Sumeru.unity.meta
+ProjectSettings/HDRPProjectSettings.asset
+ProjectSettings/URPProjectSettings.asset

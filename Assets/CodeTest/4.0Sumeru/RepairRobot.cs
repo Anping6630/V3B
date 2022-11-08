@@ -6,32 +6,39 @@ using UnityEngine.UI;
 
 public class RepairRobot: MonoBehaviour
 {
-    //ªş¨­¾÷¨î§ï«öÁä®É°O±oÀË¬d¨â­Ó¾÷¾¹¤H
-
-    [Header("¨¤¦â±±¨î¾¹")]
+    [Header("è§’è‰²æ§åˆ¶å™¨")]
     public CharacterController controller;
-    [Header("Äá¼v¾÷")]
+    [Header("æ©Ÿå™¨äººæ”å½±æ©Ÿ")]
     public Camera robotCamera;
-    [Header("µø¨¤ÆF±Ó«×")]
+    [Header("è¦–è§’éˆæ•åº¦")]
     public float mouseSensitivity;
-    [Header("²¾°Ê³t«×")]
+    [Header("ç§»å‹•é€Ÿåº¦")]
     public float moveSpeed;
 
-    //Äá¼v¾÷//
+    [Header("ä¿®å¾©ä¸­æè³ª")]
+    public Material repairing_M;
+    [Header("ä¿®å¾©å®Œæˆæè³ª")]
+    public Material repaired_M;
+
+    public GameObject[] List;
+
+    Rigidbody rb;
+
     float xRotation = 0f;
 
     void Awake()
     {
-
+        rb = this.gameObject.GetComponent<Rigidbody>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
-            FirstPersonLook();
-            Movement();
+        FirstPersonLook();
+        //Movement();
+        Movementt();
     }
 
-    void FirstPersonLook()//²Ä¤@¤HºÙÃèÀY
+    void FirstPersonLook()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
@@ -43,7 +50,7 @@ public class RepairRobot: MonoBehaviour
         transform.Rotate(Vector3.up * mouseX);
     }
 
-    void Movement()//¦Û¥Ñ²¾°Ê
+    void Movement()
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
@@ -53,7 +60,62 @@ public class RepairRobot: MonoBehaviour
 
         controller.Move(move * moveSpeed * Time.deltaTime);
     }
-    void OnTriggerEnter(Collider other){ } // ¶}©l±µÄ²Àş¶¡·|©I¥s¤@¦¸
-    void OnTriggerStay(Collider other) { } // ±µÄ²´Á¶¡·|«ùÄò©I¥s
-    void OnTriggerExit(Collider other) { }¡@// °±¤î±µÄ²Àş¶¡·|©I¥s¤@¦¸
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        Rigidbody body = hit.collider.attachedRigidbody;
+
+        switch(body.transform.gameObject.tag)
+        {
+            case "Normal":
+                break;
+            case "Fixing":
+                break;
+            //case "Fixed"
+            //    break;
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        switch (other.transform.gameObject.tag)
+        {
+            case "Normal":
+                other.transform.gameObject.GetComponent<MeshRenderer>().material = repairing_M;
+                other.transform.gameObject.tag = "Repairing";
+                break;
+            case "Node":
+                other.transform.gameObject.GetComponent<MeshRenderer>().material = repairing_M;
+                other.transform.gameObject.tag = "Repairing";
+                break;
+            case "Repaired":
+                for(int i = 0; i < List.Length; i++)
+                {
+                    List[i].GetComponent<Rigidbody>().useGravity = true;
+                    List[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+                }
+                break;
+        }
+    }
+    
+    void OnCollisionExit(Collision other)
+    {
+        switch (other.transform.gameObject.tag)
+        {
+            case "Repairing":
+                other.transform.gameObject.GetComponent<MeshRenderer>().material = repaired_M;
+                other.transform.gameObject.tag = "Repaired";
+                break;
+        }
+    }
+
+    void Movementt()//ç§»å‹•
+    {
+        float horizontalMove = Input.GetAxis("Horizontal");
+        float verticalMove = Input.GetAxis("Vertical");
+
+        Vector3 moveDirection= transform.forward * verticalMove + transform.right * horizontalMove;
+
+        rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Impulse);
+    }
 }
