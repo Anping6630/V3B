@@ -40,6 +40,10 @@ public class EnergyRobot3 : MonoBehaviour
     {
         laserLine = energyGun.GetComponent<LineRenderer>();
         laserLine.enabled = false;
+
+        //鎖滑鼠//
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()

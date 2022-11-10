@@ -14,6 +14,8 @@ public class LightingRobot : MonoBehaviour
     public float moveSpeed;
     [Header("頭燈")]
     public GameObject robotLight;
+    [Header("機器人UI")]
+    public GameObject robotUI;
     [Header("密碼輸入面板")]
     public GameObject inputPanel;
     [Header("摩斯密碼表")]
@@ -25,19 +27,18 @@ public class LightingRobot : MonoBehaviour
     bool isControlling;
     //能源機器人攝影機//
     Camera energyRobotCamera;
+    //頭燈開關//
+    bool isLightOpen;
     //視角//
     float xRotation = 0f;
 
-    void Start()
+    void Start()//初始化(基本上就是把所有東東關掉)
     {
-        //鎖滑鼠//
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-
         robotLight.SetActive(false);
         isControlling = false;
         isControllable = false;
         robotCamera.gameObject.SetActive(false);
+        robotUI.gameObject.SetActive(false);
         energyRobotCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
     }
 
@@ -64,6 +65,11 @@ public class LightingRobot : MonoBehaviour
             {
                 Transferred(false);
             }
+            if (Input.GetKeyDown("e"))
+            {
+                robotLight.SetActive(isLightOpen);
+                isLightOpen = !isLightOpen;
+            }
         }
     }
 
@@ -87,10 +93,11 @@ public class LightingRobot : MonoBehaviour
         controller.Move(move * moveSpeed * Time.deltaTime);
     }
 
-    public void Transferred(bool isTransferred)//附身
+    public void Transferred(bool isTransferred)//附身處理
     {
         isControlling = isTransferred;
         robotCamera.gameObject.SetActive(isTransferred);
+        robotUI.gameObject.SetActive(isTransferred);
         energyRobotCamera.gameObject.SetActive(!isTransferred);
     }
 
