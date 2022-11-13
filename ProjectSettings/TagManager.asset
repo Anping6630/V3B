@@ -12,6 +12,8 @@ TagManager:
   - Node
   - Repairing
   - Repaired
+  - FineObject
+  - BrokenObject
   layers:
   - Default
   - TransparentFX

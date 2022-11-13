@@ -16,12 +16,10 @@ public class EnergyRobot3 : MonoBehaviour
     public float mouseSensitivity;
     [Header("移動速度")]
     public float moveSpeed;
+    [Header("機器人UI")]
+    public GameObject robotUI;
     [Header("準心UI")]
     public GameObject aimPoint;
-
-    //玩家是否操作其他機器人中(測試中功能)//
-    public GameObject ControllingRobot = null;
-
     [Header("能源發射點")]
     public Transform energyOrigin;
     [Header("能源槍模型")]
@@ -30,6 +28,11 @@ public class EnergyRobot3 : MonoBehaviour
     public float fireRate = 0.2f;
     public float laserDuration = 0.05f;
 
+    public GameObject target;
+    public Vector2 pos;
+
+    //玩家是否操作其他機器人中(測試中功能)//
+    public GameObject ControllingRobot = null;
     //攝影機//
     float xRotation = 0f;
     //灌注能源//
@@ -54,12 +57,14 @@ public class EnergyRobot3 : MonoBehaviour
             Movement();
             Aim();
             InfuseEnergy();
+            RetakeEnergy();
         }
         else
         {
             if (Input.GetKeyDown("q"))//按Q取消附身
             {
                 ControllingRobot = null;
+                robotUI.SetActive(true);
             }
         }
     }
@@ -130,12 +135,10 @@ public class EnergyRobot3 : MonoBehaviour
                         break;
 
                     case "ChargingPort"://命中能源孔
-                        hit.collider.gameObject.GetComponent<ChargingPort>().Charge();
-                        hit.collider.gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
-
+                        hit.collider.gameObject.GetComponent<ChargingPort>().Energy(true);
                         break;
                 }
-                if(hit.collider.gameObject.layer == LayerMask.NameToLayer("UI"))//按下按鈕
+                if(hit.collider.gameObject.layer == LayerMask.NameToLayer("UI"))//按下UI上按鈕
                 {
                     ExecuteEvents.Execute<IPointerClickHandler>(hit.collider.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
                 }
@@ -155,10 +158,31 @@ public class EnergyRobot3 : MonoBehaviour
         laserLine.enabled = false;
     }
 
+    void RetakeEnergy()//收回能源
+    {
+        if (Input.GetKeyDown("e"))
+        {
+            Vector3 rayOrigin = robotCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit hit;
+            if (Physics.Raycast(rayOrigin, robotCamera.transform.forward, out hit, gunRange))
+            {
+                switch (hit.transform.gameObject.tag)
+                {
+                    case "ChargingPort"://收回能源孔
+                        if (hit.collider.gameObject.GetComponent<ChargingPort>().isCharge)
+                        {
+                            hit.collider.gameObject.GetComponent<ChargingPort>().Energy(false);
+                        }
+                        break;
+                }
+            }
+        }
+    }
 
     void Transfer(GameObject target)//附身
     {
         target.GetComponent<Controllable>().Transfer();
         ControllingRobot = target;
+        robotUI.SetActive(false);
     }
 }

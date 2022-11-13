@@ -6,15 +6,12 @@ using UnityEngine.UI;
 
 public class RepairRobot: MonoBehaviour
 {
-    [Header("角色控制器")]
-    public CharacterController controller;
     [Header("機器人攝影機")]
     public Camera robotCamera;
     [Header("視角靈敏度")]
     public float mouseSensitivity;
     [Header("移動速度")]
     public float moveSpeed;
-
     [Header("修復中材質")]
     public Material repairing_M;
     [Header("修復完成材質")]
@@ -23,8 +20,10 @@ public class RepairRobot: MonoBehaviour
     public GameObject[] List;
 
     Rigidbody rb;
-
     float xRotation = 0f;
+
+
+    Mesh holdingBlueprint;
 
     void Awake()
     {
@@ -34,11 +33,12 @@ public class RepairRobot: MonoBehaviour
     void FixedUpdate()
     {
         FirstPersonLook();
-        //Movement();
-        Movementt();
+        Movement();
+        GetBluePrint();
+        Repair();
     }
 
-    void FirstPersonLook()
+    void FirstPersonLook()//第一人稱鏡頭
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
@@ -50,15 +50,51 @@ public class RepairRobot: MonoBehaviour
         transform.Rotate(Vector3.up * mouseX);
     }
 
-    void Movement()
+    void Movement()//剛體移動
     {
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        float horizontalMove = Input.GetAxis("Horizontal");
+        float verticalMove = Input.GetAxis("Vertical");
 
-        Vector3 move = transform.right * x + transform.forward * z;
-        move.y -= 20f * Time.deltaTime;
+        Vector3 moveDirection = transform.forward * verticalMove + transform.right * horizontalMove;
 
-        controller.Move(move * moveSpeed * Time.deltaTime);
+        rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Impulse);
+    }
+
+    void GetBluePrint()
+    {
+        if (Input.GetKeyDown("e"))
+        {
+            Vector3 rayOrigin = robotCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit hit;
+            if (Physics.Raycast(rayOrigin, robotCamera.transform.forward, out hit, 50f))
+            {
+                switch (hit.transform.gameObject.tag)
+                {
+                    case "FineObject"://命中狀態良好物件
+                        holdingBlueprint = hit.transform.gameObject.GetComponent<MeshFilter>().mesh;
+                        print("已複製" + holdingBlueprint);
+                        break;
+                }
+            }
+        }
+    }
+
+    void Repair()
+    {
+        if (Input.GetMouseButtonDown(0) && holdingBlueprint != null)
+        {
+            Vector3 rayOrigin = robotCamera.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit hit;
+            if (Physics.Raycast(rayOrigin, robotCamera.transform.forward, out hit, 50f))
+            {
+                switch (hit.transform.gameObject.tag)
+                {
+                    case "BrokenObject"://命中狀態良好物件
+                        hit.transform.gameObject.GetComponent<MeshFilter>().mesh = holdingBlueprint;
+                        break;
+                }
+            }
+        }
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
@@ -107,15 +143,5 @@ public class RepairRobot: MonoBehaviour
                 other.transform.gameObject.tag = "Repaired";
                 break;
         }
-    }
-
-    void Movementt()//移動
-    {
-        float horizontalMove = Input.GetAxis("Horizontal");
-        float verticalMove = Input.GetAxis("Vertical");
-
-        Vector3 moveDirection= transform.forward * verticalMove + transform.right * horizontalMove;
-
-        rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Impulse);
     }
 }

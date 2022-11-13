@@ -65,7 +65,7 @@ public class LightingRobot : MonoBehaviour
             {
                 Transferred(false);
             }
-            if (Input.GetKeyDown("e"))
+            if (Input.GetKeyDown("e"))//電燈開關
             {
                 robotLight.SetActive(isLightOpen);
                 isLightOpen = !isLightOpen;
@@ -81,6 +81,7 @@ public class LightingRobot : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -50f, 50f);
 
         robotCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        robotLight.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
     }
 
     void Movement()//前後移動，左右自轉

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PasswordCard : MonoBehaviour
 {
-    public Animator lockedDoor;//反鎖大門
+    [Header("此物件控制的物件")]
+    public Animator relatedObject;
     GameObject[] cameras;//所有攝影機
 
     void Awake()
@@ -18,7 +19,7 @@ public class PasswordCard : MonoBehaviour
         {
             if (Vector3.Distance(cameras[i].transform.position, transform.position) < 5)
             {
-                lockedDoor.SetBool("isEnable", true);
+                relatedObject.SetBool("isEnable", true);
             }
         }
     }
