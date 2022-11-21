@@ -12,8 +12,10 @@ public class LightingRobot : MonoBehaviour
     public float mouseSensitivity;
     [Header("移動速度")]
     public float moveSpeed;
-    [Header("頭燈")]
-    public GameObject robotLight;
+    [Header("點狀頭燈")]
+    public GameObject robotSpotLight;
+    [Header("環狀頭燈")]
+    public GameObject robotAnnulusLight;
     [Header("機器人UI")]
     public GameObject robotUI;
     [Header("密碼輸入面板")]
@@ -29,12 +31,15 @@ public class LightingRobot : MonoBehaviour
     Camera energyRobotCamera;
     //頭燈開關//
     bool isLightOpen;
+    //頭燈類型//
+    bool isLightSpot;
     //視角//
     float xRotation = 0f;
 
     void Start()//初始化(基本上就是把所有東東關掉)
     {
-        robotLight.SetActive(false);
+        robotSpotLight.SetActive(false);
+        robotAnnulusLight.SetActive(false);
         isControlling = false;
         isControllable = false;
         robotCamera.gameObject.SetActive(false);
@@ -67,8 +72,23 @@ public class LightingRobot : MonoBehaviour
             }
             if (Input.GetKeyDown("e"))//電燈開關
             {
-                robotLight.SetActive(isLightOpen);
                 isLightOpen = !isLightOpen;
+                if (isLightOpen)
+                {
+                    robotSpotLight.SetActive(isLightSpot);
+                    robotAnnulusLight.SetActive(!isLightSpot);
+                }
+                else
+                {
+                    robotSpotLight.SetActive(false);
+                    robotAnnulusLight.SetActive(false);
+                }
+            }
+            if (Input.GetKeyDown("r"))//光源種類切換
+            {
+                robotSpotLight.SetActive(isLightSpot);
+                robotAnnulusLight.SetActive(!isLightSpot);
+                isLightSpot = !isLightSpot;
             }
         }
     }
@@ -81,7 +101,7 @@ public class LightingRobot : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -50f, 50f);
 
         robotCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        robotLight.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        robotSpotLight.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
     }
 
     void Movement()//前後移動，左右自轉
@@ -105,7 +125,9 @@ public class LightingRobot : MonoBehaviour
     public void PowerUp()//摩斯密碼正確，改為可以被附身
     {
         isControllable = true;
-        robotLight.SetActive(true);
+        robotSpotLight.SetActive(true);
+        isLightSpot = true;
+        isLightOpen = true;
         this.tag = "Robot";
         inputPanel.SetActive(false);
         morseCodePanel.SetActive(false);
