@@ -5350,8 +5350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resultText: {fileID: 612322260}
-  EnterButton: {fileID: 1548908348}
-  correctAnswer: 4591
+  answer: 4591
 --- !u!114 &1131073136
 MonoBehaviour:
   m_ObjectHideFlags: 0

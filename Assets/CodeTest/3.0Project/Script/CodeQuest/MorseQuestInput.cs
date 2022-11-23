@@ -8,7 +8,7 @@ public class MorseQuestInput : MonoBehaviour
     [Header("顯示欄位")]
     public Text resultText;
     [Header("正確密碼")]
-    public int answer;
+    public string answer;
 
     public void OnNumberClick(int number)//按下數字鍵
     {
