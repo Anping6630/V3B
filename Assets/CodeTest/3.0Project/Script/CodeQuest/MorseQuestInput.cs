@@ -5,32 +5,35 @@ using UnityEngine.UI;
 
 public class MorseQuestInput : MonoBehaviour
 {
-    public Text resultText;//resultText名稱自訂
-    public Button EnterButton;
-    public int correctAnswer=4591;
-    public void OnNumberClick(int number)//OnNumberClick名稱自訂
+    [Header("顯示欄位")]
+    public Text resultText;
+    [Header("正確密碼")]
+    public int answer;
+
+    public void OnNumberClick(int number)//按下數字鍵
     {
-            resultText.text += number.ToString();//ToString將數字轉為字串
+            resultText.text += number.ToString();
     }
-    public void OnClearClick()//AC
+
+    public void OnClearClick()//按下清除鍵
     {
-        resultText.text = "";//將字串
+        resultText.text = "";
     }
+
     public void OnEnterClick()//Enter
     {
-        if (resultText.text == "4591")
+        if (resultText.text == answer)
         {
             resultText.text = "pass";//門會打開
             GameObject.Find("LightingRobot").GetComponent<LightingRobot>().PowerUp();
         }
     }
-    // Start is called before the first frame update
+
     void Start()
     {
        
     }
 
-    // Update is called once per frame
     void Update()
     {
         
