@@ -20,8 +20,6 @@ public class LightingRobot : MonoBehaviour
     public GameObject robotUI;
     [Header("密碼輸入面板")]
     public GameObject inputPanel;
-    [Header("摩斯密碼表")]
-    public GameObject morseCodePanel;
 
     //是否能夠被操縱//
     bool isControllable;
@@ -53,13 +51,7 @@ public class LightingRobot : MonoBehaviour
         {
             if(Vector3.Distance(energyRobotCamera.transform.position, transform.position) < 7)
             {
-                inputPanel.SetActive(true);
-                morseCodePanel.SetActive(true);
-            }
-            else
-            {
-                inputPanel.SetActive(false);
-                morseCodePanel.SetActive(false);
+                inputPanel.GetComponent<Animator>().SetBool("enter",true);
             }
         }
         if (isControlling)
@@ -130,6 +122,5 @@ public class LightingRobot : MonoBehaviour
         isLightOpen = true;
         this.tag = "Robot";
         inputPanel.SetActive(false);
-        morseCodePanel.SetActive(false);
     }
 }

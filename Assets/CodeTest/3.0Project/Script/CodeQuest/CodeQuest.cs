@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CodeQuest : MonoBehaviour
 {
     [Header("顯示欄位")]
-    public Text resultText;
+    public TextMeshProUGUI resultText;
     [Header("謎題名稱")]
     public string questName;
     [Header("正確密碼")]
@@ -31,7 +32,7 @@ public class CodeQuest : MonoBehaviour
     {
         if (resultText.text == answer)//正解
         {   
-            resultText.text = "pass";
+            resultText.text = "PASS";
 
             switch (questName)
             {
