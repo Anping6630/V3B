@@ -1,29 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;//¸ü¤J¨ç¦¡®w
+using UnityEngine.SceneManagement;//ï¿½ï¿½ï¿½Jï¿½ç¦¡ï¿½w
 
 public class Gamebutton : MonoBehaviour
 {
     public void playGame()
     {
-        SceneManager.LoadScene(1);//¶}©l¹CÀ¸
+        SceneManager.LoadScene(1);//ï¿½}ï¿½lï¿½Cï¿½ï¿½
     }
 
     public void QuitGame()
     {
-        Application.Quit();//µ²§ô¹CÀ¸
+        Application.Quit();//ï¿½ï¿½ï¿½ï¿½Cï¿½ï¿½
     }
-    
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

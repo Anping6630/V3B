@@ -18,8 +18,6 @@ public class EnergyRobot3 : MonoBehaviour
     public float moveSpeed;
     [Header("機器人UI")]
     public GameObject robotUI;
-    [Header("準心UI")]
-    public GameObject aimPoint;
     [Header("能源發射點")]
     public Transform energyOrigin;
     [Header("能源槍模型")]
@@ -43,10 +41,6 @@ public class EnergyRobot3 : MonoBehaviour
     {
         laserLine = energyGun.GetComponent<LineRenderer>();
         laserLine.enabled = false;
-
-        //鎖滑鼠//
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
@@ -58,14 +52,6 @@ public class EnergyRobot3 : MonoBehaviour
             Aim();
             InfuseEnergy();
             RetakeEnergy();
-        }
-        else
-        {
-            if (Input.GetKeyDown("q"))//按Q取消附身
-            {
-                ControllingRobot = null;
-                robotUI.SetActive(true);
-            }
         }
     }
 
@@ -96,18 +82,16 @@ public class EnergyRobot3 : MonoBehaviour
     {
         if (Input.GetMouseButton(1))
         {
-            aimPoint.SetActive(true);
             if(robotCamera.fieldOfView > 30)
             {
-                robotCamera.fieldOfView-=0.5f;
+                robotCamera.fieldOfView-=1f;
             }
         }
         else
         {
-            aimPoint.SetActive(false);
             if (robotCamera.fieldOfView < 60)
             {
-                robotCamera.fieldOfView+=0.5f;
+                robotCamera.fieldOfView+=1f;
             }
         }
     }
@@ -131,7 +115,6 @@ public class EnergyRobot3 : MonoBehaviour
                 {
                     case "Robot"://命中機器人
                         Transfer(hit.collider.gameObject);
-                        aimPoint.SetActive(false);
                         break;
 
                     case "ChargingPort"://命中能源孔
@@ -184,5 +167,11 @@ public class EnergyRobot3 : MonoBehaviour
         target.GetComponent<Controllable>().Transfer();
         ControllingRobot = target;
         robotUI.SetActive(false);
+    }
+
+    public void CancelTransfer()
+    {
+        ControllingRobot = null;
+        robotUI.SetActive(true);
     }
 }

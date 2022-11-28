@@ -47,6 +47,13 @@ public class CodeQuest : MonoBehaviour
         else
         {
             resultText.text = "";
+
+            switch (questName)
+            {
+                case "Morse"://臨時用亂抓，建議改
+                    GameObject.Find("MorseLight").GetComponent<Animator>().SetTrigger("error");
+                    break;
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LightingRobot : MonoBehaviour
 {
@@ -14,12 +15,15 @@ public class LightingRobot : MonoBehaviour
     public float moveSpeed;
     [Header("點狀頭燈")]
     public GameObject robotSpotLight;
-    [Header("環狀頭燈")]
-    public GameObject robotAnnulusLight;
     [Header("機器人UI")]
     public GameObject robotUI;
     [Header("密碼輸入面板")]
     public GameObject inputPanel;
+    [Header("摩斯密碼燈")]
+    public GameObject morseLight;
+
+    public Text UI;
+    float uiTimer;
 
     //是否能夠被操縱//
     bool isControllable;
@@ -37,7 +41,6 @@ public class LightingRobot : MonoBehaviour
     void Start()//初始化(基本上就是把所有東東關掉)
     {
         robotSpotLight.SetActive(false);
-        robotAnnulusLight.SetActive(false);
         isControlling = false;
         isControllable = false;
         robotCamera.gameObject.SetActive(false);
@@ -49,9 +52,9 @@ public class LightingRobot : MonoBehaviour
     {
         if (!isControllable)
         {
-            if(Vector3.Distance(energyRobotCamera.transform.position, transform.position) < 7)
+            if (Vector3.Distance(energyRobotCamera.transform.position, transform.position) < 7)//玩家第一次接近
             {
-                inputPanel.GetComponent<Animator>().SetBool("enter",true);
+                inputPanel.GetComponent<Animator>().SetBool("enter", true);
             }
         }
         if (isControlling)
@@ -60,28 +63,27 @@ public class LightingRobot : MonoBehaviour
             Movement();
             if (Input.GetKeyDown("q"))//按Q取消附身
             {
-                Transferred(false);
+                if(Vector3.Distance(energyRobotCamera.transform.position, transform.position) < 6)
+                {
+                    Transferred(false);
+                }
+                else
+                {
+                    UI.text = "距離能源機器人過遠";
+                    uiTimer = 0;
+                }
             }
             if (Input.GetKeyDown("e"))//電燈開關
             {
                 isLightOpen = !isLightOpen;
-                if (isLightOpen)
-                {
-                    robotSpotLight.SetActive(isLightSpot);
-                    robotAnnulusLight.SetActive(!isLightSpot);
-                }
-                else
-                {
-                    robotSpotLight.SetActive(false);
-                    robotAnnulusLight.SetActive(false);
-                }
+                robotSpotLight.SetActive(isLightOpen);
             }
-            if (Input.GetKeyDown("r"))//光源種類切換
-            {
-                robotSpotLight.SetActive(isLightSpot);
-                robotAnnulusLight.SetActive(!isLightSpot);
-                isLightSpot = !isLightSpot;
-            }
+        }
+
+        uiTimer += Time.deltaTime;
+        if (uiTimer > 1)
+        {
+            UI.text = "";
         }
     }
 
@@ -99,7 +101,7 @@ public class LightingRobot : MonoBehaviour
     void Movement()//前後移動，左右自轉
     {
         float z = Input.GetAxis("Vertical");
-        this.transform.Rotate(0f, Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime*20 ,0f);
+        this.transform.Rotate(0f, Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime * 20, 0f);
 
         Vector3 move = transform.forward * z;
         move.y -= 20f * Time.deltaTime;
@@ -112,6 +114,9 @@ public class LightingRobot : MonoBehaviour
         robotCamera.gameObject.SetActive(isTransferred);
         robotUI.gameObject.SetActive(isTransferred);
         energyRobotCamera.gameObject.SetActive(!isTransferred);
+
+        //臨時//
+        GameObject.Find("EnergyRobot").GetComponent<EnergyRobot3>().CancelTransfer();
     }
 
     public void PowerUp()//摩斯密碼正確，改為可以被附身
