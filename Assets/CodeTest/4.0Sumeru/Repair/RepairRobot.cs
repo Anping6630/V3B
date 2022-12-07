@@ -12,10 +12,10 @@ public class RepairRobot: MonoBehaviour
     public float mouseSensitivity;
     [Header("移動速度")]
     public float moveSpeed;
-    [Header("修復中材質")]
-    public Material repairing_M;
+    [Header("修復中模型")]
+    public Mesh repairing_M;
     [Header("修復完成材質")]
-    public Material repaired_M;
+    public Mesh repaired_M;
 
     public GameObject[] List;
 
@@ -60,7 +60,7 @@ public class RepairRobot: MonoBehaviour
         rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Impulse);
     }
 
-    void GetBluePrint()
+    void GetBluePrint()//取得藍圖
     {
         if (Input.GetKeyDown("e"))
         {
@@ -79,7 +79,7 @@ public class RepairRobot: MonoBehaviour
         }
     }
 
-    void Repair()
+    void Repair()//修復物件
     {
         if (Input.GetMouseButtonDown(0) && holdingBlueprint != null)
         {
@@ -97,35 +97,20 @@ public class RepairRobot: MonoBehaviour
         }
     }
 
-    void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        Rigidbody body = hit.collider.attachedRigidbody;
-
-        switch(body.transform.gameObject.tag)
-        {
-            case "Normal":
-                break;
-            case "Fixing":
-                break;
-            //case "Fixed"
-            //    break;
-        }
-    }
-
     void OnCollisionEnter(Collision other)
     {
         switch (other.transform.gameObject.tag)
         {
-            case "Normal":
-                other.transform.gameObject.GetComponent<MeshRenderer>().material = repairing_M;
+            case "Normal"://正常地板
+                other.transform.gameObject.GetComponent<MeshFilter>().mesh = repairing_M; 
                 other.transform.gameObject.tag = "Repairing";
                 break;
-            case "Node":
-                other.transform.gameObject.GetComponent<MeshRenderer>().material = repairing_M;
+            case "Node"://節點地板
+                other.transform.gameObject.GetComponent<MeshFilter>().mesh = repairing_M;
                 other.transform.gameObject.tag = "Repairing";
                 break;
-            case "Repaired":
-                for(int i = 0; i < List.Length; i++)
+            case "Repaired"://已修復地板
+                for (int i = 0; i < List.Length; i++)
                 {
                     List[i].GetComponent<Rigidbody>().useGravity = true;
                     List[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
@@ -139,7 +124,7 @@ public class RepairRobot: MonoBehaviour
         switch (other.transform.gameObject.tag)
         {
             case "Repairing":
-                other.transform.gameObject.GetComponent<MeshRenderer>().material = repaired_M;
+                other.transform.gameObject.GetComponent<MeshFilter>().mesh = repaired_M;
                 other.transform.gameObject.tag = "Repaired";
                 break;
         }
