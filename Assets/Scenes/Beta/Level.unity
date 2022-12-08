@@ -2393,7 +2393,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3515714269849071706}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &316344736
 MeshCollider:
@@ -10519,7 +10519,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3515714269849071706}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1530149718
 MeshCollider:
@@ -12577,7 +12577,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1738417712}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.2999992, y: 18.614815, z: 9.595457}
+  m_LocalPosition: {x: 1.2999992, y: 18.63, z: 9.595457}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13154,6 +13154,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f4c1b004fc31ce43832ae7320726d96, type: 3}
+--- !u!1 &1797692989 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5f4c1b004fc31ce43832ae7320726d96, type: 3}
+  m_PrefabInstance: {fileID: 1797692988}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &1797692990
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797692989}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1010299663266425209, guid: 5f4c1b004fc31ce43832ae7320726d96, type: 3}
 --- !u!1 &1805192438
 GameObject:
   m_ObjectHideFlags: 0
@@ -15725,7 +15744,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 426539084269473546}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.299999, y: 18.614815, z: -2.404543}
+  m_LocalPosition: {x: 5.299999, y: 18.63, z: -2.404543}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15740,7 +15759,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 426539085107491126}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.299999, y: 18.614815, z: 5.595457}
+  m_LocalPosition: {x: 5.299999, y: 18.63, z: 5.595457}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16451,8 +16470,8 @@ Transform:
   - {fileID: 1161565477}
   - {fileID: 258042544}
   - {fileID: 1257524173}
-  - {fileID: 1530149717}
   - {fileID: 316344735}
+  - {fileID: 1530149717}
   - {fileID: 1054000251939296688}
   - {fileID: 1054000252175428492}
   - {fileID: 1738417713}
@@ -16881,7 +16900,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4504932689773241891}
   m_LocalRotation: {x: -0, y: -0.7184013, z: -0, w: 0.6956289}
-  m_LocalPosition: {x: 28.63, y: 1.51, z: 7.3513}
+  m_LocalPosition: {x: 33.28, y: 1.51, z: 7.5}
   m_LocalScale: {x: 0.43158004, y: 0.64754266, z: 0.43158004}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16919,13 +16938,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   robotCamera: {fileID: 4504932690341605740}
   mouseSensitivity: 1800
-  moveSpeed: 0.02
-  repairing_M: {fileID: -5401524180968422076, guid: 37c0b15e22dbcbc4f858f1c016f533fe, type: 3}
-  repaired_M: {fileID: 8123925991422043903, guid: e370677556a4f7246b13ab074f9ca4c3, type: 3}
-  List:
+  moveSpeed: 0.03
+  normal_M: {fileID: -4298999938323022622, guid: 9dae3c2f06c766c468ad931d5cd3fbe3, type: 3}
+  node_M: {fileID: 8123925991422043903, guid: e370677556a4f7246b13ab074f9ca4c3, type: 3}
+  repairing_M: {fileID: 8123925991422043903, guid: e370677556a4f7246b13ab074f9ca4c3, type: 3}
+  repaired_M: {fileID: -7848895607844020556, guid: 71787ec5adc615641892e393cb4dc281, type: 3}
+  goalFloor: {fileID: 1530149716}
+  normalFloor:
   - {fileID: 4706032974775346223}
   - {fileID: 1656069971}
-  - {fileID: 426539084269473546}
   - {fileID: 1879020528}
   - {fileID: 1251855776}
   - {fileID: 1905658784}
@@ -16933,8 +16954,10 @@ MonoBehaviour:
   - {fileID: 1161565476}
   - {fileID: 258042543}
   - {fileID: 1257524172}
-  - {fileID: 1530149716}
   - {fileID: 316344734}
+  - {fileID: 1530149716}
+  nodeFloor:
+  - {fileID: 426539084269473546}
   - {fileID: 426539085107491126}
   - {fileID: 1738417712}
 --- !u!136 &4504932689773241885

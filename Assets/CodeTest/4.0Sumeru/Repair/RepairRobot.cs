@@ -12,12 +12,19 @@ public class RepairRobot: MonoBehaviour
     public float mouseSensitivity;
     [Header("移動速度")]
     public float moveSpeed;
-    [Header("修復中模型")]
+    [Header("普通地板")]
+    public Mesh normal_M;
+    [Header("節點地板")]
+    public Mesh node_M;
+    [Header("修復中地板")]
     public Mesh repairing_M;
-    [Header("修復完成材質")]
+    [Header("修復完成地板")]
     public Mesh repaired_M;
+    [Header("終點地板")]
+    public GameObject goalFloor;
 
-    public GameObject[] List;
+    public GameObject[] normalFloor;
+    public GameObject[] nodeFloor;
 
     Rigidbody rb;
     float xRotation = 0f;
@@ -28,6 +35,8 @@ public class RepairRobot: MonoBehaviour
     void Awake()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
+        normalFloor = GameObject.FindGameObjectsWithTag("Normal");
+        nodeFloor = GameObject.FindGameObjectsWithTag("Node");
     }
 
     void FixedUpdate()
@@ -110,23 +119,94 @@ public class RepairRobot: MonoBehaviour
                 other.transform.gameObject.tag = "Repairing";
                 break;
             case "Repaired"://已修復地板
-                for (int i = 0; i < List.Length; i++)
-                {
-                    List[i].GetComponent<Rigidbody>().useGravity = true;
-                    List[i].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-                }
+                BridgeBreak();
+                break;
+        }
+        if (other.transform.gameObject == goalFloor)//過關判定
+        {
+            if (isComplete())
+            {
+                BridgeComplete();
+            }
+            else
+            {
+                BridgeBreak();
+            }
+        }
+    }
+
+    private bool isComplete()
+    {
+        bool isComplete = true;
+        for (int i = 0; i < nodeFloor.Length; i++)
+        {
+            if (nodeFloor[i].tag != "Repaired")
+            {
+                isComplete = false;
+            }
+            if (nodeFloor[0].tag == "Complete")
+            {
+                isComplete = true;
+            }
+        }
+        return isComplete;
+    }
+
+    void OnCollision(Collision other)
+    {
+        switch (other.transform.gameObject.tag)
+        {
+            case "Repaired"://已修復地板
+                BridgeBreak();
                 break;
         }
     }
-    
+
     void OnCollisionExit(Collision other)
     {
         switch (other.transform.gameObject.tag)
         {
             case "Repairing":
-                other.transform.gameObject.GetComponent<MeshFilter>().mesh = repaired_M;
-                other.transform.gameObject.tag = "Repaired";
+                StartCoroutine(ToRepaired(other.gameObject));
                 break;
+        }
+    }
+
+    IEnumerator ToRepaired(GameObject i)//修復中變為修復完成
+    {
+        yield return new WaitForSeconds(1);
+        i.transform.gameObject.GetComponent<MeshFilter>().mesh = repaired_M;
+        i.transform.gameObject.tag = "Repaired";
+    }
+
+    void BridgeComplete()//修橋成功
+    {
+        for (int i = 0; i < normalFloor.Length; i++)
+        {
+            normalFloor[i].tag = "Complete";
+            normalFloor[i].GetComponent<MeshFilter>().mesh = repaired_M;
+        }
+        for (int i = 0; i < nodeFloor.Length; i++)
+        {
+            nodeFloor[i].tag = "Complete";
+            nodeFloor[i].GetComponent<MeshFilter>().mesh = repaired_M;
+        }
+    }
+ 
+    void BridgeBreak()//失敗斷橋
+    {
+        print("斷橋");
+        transform.position = new Vector3(33.28f, 1.51f, 7.5f);
+
+        for (int i = 0; i < normalFloor.Length; i++)
+        {
+            normalFloor[i].tag = "Normal";
+            normalFloor[i].GetComponent<MeshFilter>().mesh = normal_M;
+        }
+        for (int i = 0; i < nodeFloor.Length; i++)
+        {
+            nodeFloor[i].tag = "Complete";
+            nodeFloor[i].GetComponent<MeshFilter>().mesh = node_M;
         }
     }
 }

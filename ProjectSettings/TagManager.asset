@@ -14,6 +14,7 @@ TagManager:
   - Repaired
   - FineObject
   - BrokenObject
+  - Complete
   layers:
   - Default
   - TransparentFX
