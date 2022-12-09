@@ -174,4 +174,14 @@ public class EnergyRobot3 : MonoBehaviour
         ControllingRobot = null;
         robotUI.SetActive(true);
     }
+
+    void OnControllerColliderHit(ControllerColliderHit other)//1.5關地板
+    {
+        switch (other.transform.gameObject.tag)
+        {
+            case "Normal"://正常地板
+                transform.position = new Vector3(33.28f, 1.51f, 7.5f);
+                break;
+        }
+    }
 }

@@ -193,7 +193,7 @@ public class RepairRobot: MonoBehaviour
         }
     }
  
-    void BridgeBreak()//失敗斷橋
+    public void BridgeBreak()//失敗斷橋
     {
         print("斷橋");
         transform.position = new Vector3(33.28f, 1.51f, 7.5f);
