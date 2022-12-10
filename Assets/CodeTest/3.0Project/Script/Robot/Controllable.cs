@@ -18,6 +18,7 @@ public class Controllable : MonoBehaviour
                 this.gameObject.GetComponent<LightingRobot>().Transferred(true);
                 break;
             case "修復機器人":
+                this.gameObject.GetComponent<RepairRobot>().Transferred(true);
                 break;
         }
     }

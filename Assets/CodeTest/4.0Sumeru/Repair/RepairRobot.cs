@@ -12,6 +12,8 @@ public class RepairRobot: MonoBehaviour
     public float mouseSensitivity;
     [Header("移動速度")]
     public float moveSpeed;
+    [Header("機器人UI")]
+    public GameObject robotUI;
     [Header("普通地板")]
     public Mesh normal_M;
     [Header("節點地板")]
@@ -29,22 +31,47 @@ public class RepairRobot: MonoBehaviour
     Rigidbody rb;
     float xRotation = 0f;
 
-
     Mesh holdingBlueprint;
 
-    void Awake()
+    //正在操作此機器人//
+    bool isControlling;
+    //能源機器人攝影機//
+    Camera energyRobotCamera;
+
+    void Start()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
         normalFloor = GameObject.FindGameObjectsWithTag("Normal");
         nodeFloor = GameObject.FindGameObjectsWithTag("Node");
+
+        isControlling = false;
+        robotCamera.gameObject.SetActive(false);
+        robotUI.gameObject.SetActive(false);
+        energyRobotCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
     }
 
     void FixedUpdate()
     {
-        FirstPersonLook();
-        Movement();
-        GetBluePrint();
-        Repair();
+        if (isControlling)
+        {
+            FirstPersonLook();
+            Movement();
+            GetBluePrint();
+            Repair();
+
+            if (Input.GetKeyDown("q"))//按Q取消附身
+            {
+                if (Vector3.Distance(energyRobotCamera.transform.position, transform.position) < 6)
+                {
+                    Transferred(false);
+                }
+                else
+                {
+                    //UI.text = "距離能源機器人過遠";
+                    //uiTimer = 0;
+                }
+            }
+        }
     }
 
     void FirstPersonLook()//第一人稱鏡頭
@@ -208,5 +235,16 @@ public class RepairRobot: MonoBehaviour
             nodeFloor[i].tag = "Complete";
             nodeFloor[i].GetComponent<MeshFilter>().mesh = node_M;
         }
+    }
+
+    public void Transferred(bool isTransferred)//附身處理
+    {
+        isControlling = isTransferred;
+        robotCamera.gameObject.SetActive(isTransferred);
+        robotUI.gameObject.SetActive(isTransferred);
+        energyRobotCamera.gameObject.SetActive(!isTransferred);
+
+        //臨時//
+        GameObject.Find("EnergyRobot").GetComponent<EnergyRobot3>().CancelTransfer();
     }
 }
