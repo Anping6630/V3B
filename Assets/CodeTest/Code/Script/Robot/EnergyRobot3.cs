@@ -52,6 +52,12 @@ public class EnergyRobot3 : MonoBehaviour
             Aim();
             InfuseEnergy();
             RetakeEnergy();
+
+
+            if (Input.GetKeyDown("0"))
+            {
+                RecordPointManager.BackToRecord(this.gameObject);
+            }
         }
     }
 
@@ -73,7 +79,7 @@ public class EnergyRobot3 : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right * x + transform.forward * z;
-        move.y -= 20f * Time.deltaTime;
+        move.y -= 98f * Time.deltaTime;
 
         controller.Move(move * moveSpeed * Time.deltaTime);
     }
@@ -181,6 +187,9 @@ public class EnergyRobot3 : MonoBehaviour
         {
             case "Normal"://正常地板
                 transform.position = new Vector3(33.28f, 1.51f, 7.5f);
+                break;
+            case "BackZone":
+                RecordPointManager.BackToRecord(this.gameObject);
                 break;
         }
     }

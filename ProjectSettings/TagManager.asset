@@ -15,6 +15,7 @@ TagManager:
   - FineObject
   - BrokenObject
   - Complete
+  - BackZone
   layers:
   - Default
   - TransparentFX
