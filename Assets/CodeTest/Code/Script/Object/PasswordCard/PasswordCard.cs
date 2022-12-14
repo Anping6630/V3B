@@ -20,7 +20,7 @@ public class PasswordCard : MonoBehaviour
     {
         for(int i =0;i< cameras.Length; i++)
         {
-            if (Vector3.Distance(cameras[i].transform.position, transform.position) < 5)
+            if (Vector3.Distance(cameras[i].transform.position, transform.position) < 4)
             {
                 relatedObject.SetBool("isEnable", true);
                 Destroy(this.gameObject);

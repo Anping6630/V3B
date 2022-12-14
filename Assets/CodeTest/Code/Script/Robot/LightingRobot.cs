@@ -21,12 +21,12 @@ public class LightingRobot : MonoBehaviour
     public GameObject inputPanel;
     [Header("摩斯密碼燈")]
     public GameObject morseLight;
+    [Header("是否能被操控")]
+    public bool isControllable;
 
     public Text UI;
     float uiTimer;
 
-    //是否能夠被操縱//
-    bool isControllable;
     //正在操作此機器人//
     bool isControlling;
     //能源機器人攝影機//
@@ -42,10 +42,14 @@ public class LightingRobot : MonoBehaviour
     {
         robotSpotLight.SetActive(false);
         isControlling = false;
-        isControllable = false;
         robotCamera.gameObject.SetActive(false);
         robotUI.gameObject.SetActive(false);
         energyRobotCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
+
+        if (isControllable)
+        {
+            PowerUp();
+        }
     }
 
     void Update()
