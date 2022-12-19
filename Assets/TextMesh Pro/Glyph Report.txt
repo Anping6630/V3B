@@ -1,0 +1,19 @@
+Font: Arial  Style: Regular
+Point Size: 24   SP/PD Ratio: 20.8%
+
+Characters included: 0/7
+Missing characters: 7
+Excluded characters: 0
+
+Characters missing from font file:
+----------------------------------------
+ID: 30906	Hex: 78BA	Char [確]
+ID: 35469	Hex: 8A8D	Char [認]
+ID: 39131	Hex: 98DB	Char [飛]
+ID: 33337	Hex: 8239	Char [船]
+ID: 36914	Hex: 9032	Char [進]
+ID: 20837	Hex: 5165	Char [入]
+ID: 30321	Hex: 7671	Char [癱]
+
+Characters excluded from packing:
+----------------------------------------

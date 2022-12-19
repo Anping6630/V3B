@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DialogManager : MonoBehaviour
 {
     [Header("UI組件")]
-    public Text textLabel;
+    public TextMeshProUGUI textLabel;
     public Image dialogBackground;
     [Header("劇本文件")]
     public TextAsset textFile;
