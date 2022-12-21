@@ -244,7 +244,9 @@ public class RepairRobot: MonoBehaviour
         robotUI.gameObject.SetActive(isTransferred);
         energyRobotCamera.gameObject.SetActive(!isTransferred);
 
-        //臨時//
-        GameObject.Find("EnergyRobot").GetComponent<EnergyRobot3>().CancelTransfer();
+        if (!isTransferred)
+        {
+            GameObject.Find("EnergyRobot").GetComponent<EnergyRobot3>().CancelTransfer();
+        }
     }
 }

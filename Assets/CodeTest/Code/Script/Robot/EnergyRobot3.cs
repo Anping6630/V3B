@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class EnergyRobot3 : MonoBehaviour
 {
-    //附身機制改按鍵時記得檢查兩個機器人
-
     [Header("角色控制器")]
     public CharacterController controller;
     [Header("攝影機")]
@@ -25,12 +24,16 @@ public class EnergyRobot3 : MonoBehaviour
     public float gunRange = 50f;
     public float fireRate = 0.2f;
     public float laserDuration = 0.05f;
+    [Header("灌注能源音效")]
+    public AudioClip shoot_S;
+    [Header("附身音效")]
+    public AudioClip transfer_S;
 
     public GameObject target;
     public Vector2 pos;
 
-    //玩家是否操作其他機器人中(測試中功能)//
-    public GameObject ControllingRobot = null;
+    [Header("是否控制其他機器人中")]
+    public bool isTransfering;
     //攝影機//
     float xRotation = 0f;
     //灌注能源//
@@ -45,7 +48,7 @@ public class EnergyRobot3 : MonoBehaviour
 
     void Update()
     {
-        if (ControllingRobot == null)//沒有操作其他機器人時
+        if (!isTransfering)//沒有操作其他機器人時
         {
             FirstPersonLook();
             Movement();
@@ -127,7 +130,7 @@ public class EnergyRobot3 : MonoBehaviour
                         hit.collider.gameObject.GetComponent<ChargingPort>().Energy(true);
                         break;
                 }
-                if(hit.collider.gameObject.layer == LayerMask.NameToLayer("UI"))//按下UI上按鈕
+                if(hit.collider.gameObject.layer == LayerMask.NameToLayer("UI"))//命中UI按鈕
                 {
                     ExecuteEvents.Execute<IPointerClickHandler>(hit.collider.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
                 }
@@ -143,6 +146,7 @@ public class EnergyRobot3 : MonoBehaviour
     IEnumerator ShootEnergy()//發射能源光束
     {
         laserLine.enabled = true;
+        this.GetComponent<AudioSource>().PlayOneShot(shoot_S);
         yield return new WaitForSeconds(laserDuration);
         laserLine.enabled = false;
     }
@@ -168,29 +172,40 @@ public class EnergyRobot3 : MonoBehaviour
         }
     }
 
-    void Transfer(GameObject target)//附身
+    void Transfer(GameObject target)
     {
-        target.GetComponent<Controllable>().Transfer();
-        ControllingRobot = target;
+        isTransfering = true;
         robotUI.SetActive(false);
+        target.GetComponent<Controllable>().Transfer();
+        this.GetComponent<AudioSource>().PlayOneShot(transfer_S);
     }
 
     public void CancelTransfer()
     {
-        ControllingRobot = null;
         robotUI.SetActive(true);
+        isTransfering = false;
     }
 
-    void OnControllerColliderHit(ControllerColliderHit other)//1.5關地板
+    void OnControllerColliderHit(ControllerColliderHit other)
     {
         switch (other.transform.gameObject.tag)
         {
             case "Normal"://正常地板
                 transform.position = new Vector3(33.28f, 1.51f, 7.5f);
                 break;
-            case "BackZone":
+            case "BackZone"://重來區域
                 RecordPointManager.BackToRecord(this.gameObject);
                 break;
+            case "PasswordCard"://密碼卡
+                other.gameObject.GetComponent<PasswordCard>().GetPassword();
+                break;
         }
+    }
+
+    public void GameStart()
+    {
+        robotCamera.gameObject.GetComponent<VideoPlayer>().enabled = false;
+        isTransfering = false;
+        robotUI.SetActive(true);
     }
 }

@@ -7,26 +7,35 @@ public class PasswordCard : MonoBehaviour
 {
     [Header("此物件控制的物件")]
     public Animator relatedObject;
+    [Header("模型")]
+    public GameObject mesh;
+    [Header("提示UI")]
     public Text UI;
+    [Header("開門音效")]
+    public AudioClip doorOpen_S;
     float uiTimer;
-    GameObject[] cameras;//所有攝影機
 
     void Awake()
     {
-        cameras = GameObject.FindGameObjectsWithTag("Camera");
+ 
     }
 
     void Update()
     {
-        for(int i =0;i< cameras.Length; i++)
+        uiTimer += Time.deltaTime;
+        if (uiTimer > 1)
         {
-            if (Vector3.Distance(cameras[i].transform.position, transform.position) < 4)
-            {
-                relatedObject.SetBool("isEnable", true);
-                Destroy(this.gameObject);
-
-                UI.text = "取得密碼卡，房間門已開啟";
-            }
+            UI.text = "";
         }
+    }
+
+    public void GetPassword()
+    {
+        relatedObject.SetBool("isEnable", true);
+        mesh.SetActive(false);
+        GetComponent<AudioSource>().PlayOneShot(doorOpen_S);
+
+        UI.text = "取得密碼卡，房間門已開啟";
+        uiTimer = 0;
     }
 }

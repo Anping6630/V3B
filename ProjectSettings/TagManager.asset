@@ -16,6 +16,7 @@ TagManager:
   - BrokenObject
   - Complete
   - BackZone
+  - PasswordCard
   layers:
   - Default
   - TransparentFX

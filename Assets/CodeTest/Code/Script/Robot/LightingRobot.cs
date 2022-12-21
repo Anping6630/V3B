@@ -24,6 +24,11 @@ public class LightingRobot : MonoBehaviour
     [Header("是否能被操控")]
     public bool isControllable;
 
+    [Header("開關燈音效")]
+    public AudioClip lightSwitch_S;
+    [Header("取消附身音效")]
+    public AudioClip untransfer_S;
+
     public Text UI;
     float uiTimer;
 
@@ -70,6 +75,7 @@ public class LightingRobot : MonoBehaviour
                 if(Vector3.Distance(energyRobotCamera.transform.position, transform.position) < 6)
                 {
                     Transferred(false);
+                    this.GetComponent<AudioSource>().PlayOneShot(untransfer_S);
                 }
                 else
                 {
@@ -81,6 +87,7 @@ public class LightingRobot : MonoBehaviour
             {
                 isLightOpen = !isLightOpen;
                 robotSpotLight.SetActive(isLightOpen);
+                this.GetComponent<AudioSource>().PlayOneShot(lightSwitch_S);
             }
         }
 
@@ -119,8 +126,10 @@ public class LightingRobot : MonoBehaviour
         robotUI.gameObject.SetActive(isTransferred);
         energyRobotCamera.gameObject.SetActive(!isTransferred);
 
-        //臨時//
-        GameObject.Find("EnergyRobot").GetComponent<EnergyRobot3>().CancelTransfer();
+        if (!isTransferred)
+        {
+            GameObject.Find("EnergyRobot").GetComponent<EnergyRobot3>().CancelTransfer();
+        }
     }
 
     public void PowerUp()//摩斯密碼正確，改為可以被附身
@@ -139,6 +148,9 @@ public class LightingRobot : MonoBehaviour
         {
             case "Normal"://正常地板
                 transform.position = new Vector3(33.28f, 1.51f, 7.5f);
+                break;
+            case "PasswordCard"://密碼卡
+                other.gameObject.GetComponent<PasswordCard>().GetPassword();
                 break;
         }
     }
