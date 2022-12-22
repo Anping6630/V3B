@@ -23,7 +23,7 @@ public class PasswordCard : MonoBehaviour
     void Update()
     {
         uiTimer += Time.deltaTime;
-        if (uiTimer > 1)
+        if (uiTimer > 5)
         {
             UI.text = "";
         }
@@ -31,11 +31,10 @@ public class PasswordCard : MonoBehaviour
 
     public void GetPassword()
     {
+        uiTimer = 0;
         relatedObject.SetBool("isEnable", true);
         mesh.SetActive(false);
         GetComponent<AudioSource>().PlayOneShot(doorOpen_S);
-
         UI.text = "取得密碼卡，房間門已開啟";
-        uiTimer = 0;
     }
 }

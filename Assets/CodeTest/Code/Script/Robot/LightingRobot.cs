@@ -38,8 +38,6 @@ public class LightingRobot : MonoBehaviour
     Camera energyRobotCamera;
     //頭燈開關//
     bool isLightOpen;
-    //頭燈類型//
-    bool isLightSpot;
     //視角//
     float xRotation = 0f;
 
@@ -136,7 +134,6 @@ public class LightingRobot : MonoBehaviour
     {
         isControllable = true;
         robotSpotLight.SetActive(true);
-        isLightSpot = true;
         isLightOpen = true;
         this.tag = "Robot";
         inputPanel.SetActive(false);

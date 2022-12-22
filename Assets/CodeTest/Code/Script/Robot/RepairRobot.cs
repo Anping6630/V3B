@@ -25,6 +25,13 @@ public class RepairRobot: MonoBehaviour
     [Header("終點地板")]
     public GameObject goalFloor;
 
+    [Header("斷橋音效")]
+    public AudioClip bridgeBreak_S;
+    [Header("修橋音效")]
+    public AudioClip bridgeFix_S;
+    [Header("取消附身音效")]
+    public AudioClip untransfer_S;
+
     public GameObject[] normalFloor;
     public GameObject[] nodeFloor;
 
@@ -32,6 +39,9 @@ public class RepairRobot: MonoBehaviour
     float xRotation = 0f;
 
     Mesh holdingBlueprint;
+
+    public Text UI;
+    float uiTimer;
 
     //正在操作此機器人//
     bool isControlling;
@@ -64,13 +74,19 @@ public class RepairRobot: MonoBehaviour
                 if (Vector3.Distance(energyRobotCamera.transform.position, transform.position) < 6)
                 {
                     Transferred(false);
+                    this.GetComponent<AudioSource>().PlayOneShot(untransfer_S);
                 }
                 else
                 {
-                    //UI.text = "距離能源機器人過遠";
-                    //uiTimer = 0;
+                    UI.text = "距離能源機器人過遠";
+                    uiTimer = 0;
                 }
             }
+        }
+        uiTimer += Time.deltaTime;
+        if (uiTimer > 1)
+        {
+            UI.text = "";
         }
     }
 
@@ -140,6 +156,7 @@ public class RepairRobot: MonoBehaviour
             case "Normal"://正常地板
                 other.transform.gameObject.GetComponent<MeshFilter>().mesh = repairing_M; 
                 other.transform.gameObject.tag = "Repairing";
+                GetComponent<AudioSource>().PlayOneShot(bridgeFix_S);
                 break;
             case "Node"://節點地板
                 other.transform.gameObject.GetComponent<MeshFilter>().mesh = repairing_M;
@@ -222,7 +239,7 @@ public class RepairRobot: MonoBehaviour
  
     public void BridgeBreak()//失敗斷橋
     {
-        print("斷橋");
+        GetComponent<AudioSource>().PlayOneShot(bridgeBreak_S);
         transform.position = new Vector3(33.28f, 1.51f, 7.5f);
 
         for (int i = 0; i < normalFloor.Length; i++)
