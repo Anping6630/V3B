@@ -82,6 +82,11 @@ public class RepairRobot: MonoBehaviour
                     uiTimer = 0;
                 }
             }
+
+            if (Input.GetKeyDown("0"))
+            {
+                RecordPointManager.BackToRecord(this.gameObject);
+            }
         }
         uiTimer += Time.deltaTime;
         if (uiTimer > 1)
@@ -164,6 +169,12 @@ public class RepairRobot: MonoBehaviour
                 break;
             case "Repaired"://已修復地板
                 BridgeBreak();
+                break;
+            case "BackZone":
+                if(normalFloor[0].tag != "Complete")
+                {
+                    BridgeBreak();
+                }
                 break;
         }
         if (other.transform.gameObject == goalFloor)//過關判定

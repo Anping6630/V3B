@@ -82,7 +82,7 @@ public class EnergyRobot3 : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right * x + transform.forward * z;
-        move.y -= 98f * Time.deltaTime;
+        move.y -= 148f * Time.deltaTime;
 
         controller.Move(move * moveSpeed * Time.deltaTime);
     }

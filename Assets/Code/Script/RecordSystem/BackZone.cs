@@ -8,7 +8,7 @@ public class BackZone : MonoBehaviour
     {
         if (other.gameObject.tag == "Robot")
         {
-             RecordPointManager.BackToRecord(other.gameObject);
+            RecordPointManager.BackToRecord(other.gameObject);
         }
     }
 }

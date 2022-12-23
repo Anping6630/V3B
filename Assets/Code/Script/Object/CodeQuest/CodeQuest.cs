@@ -15,6 +15,8 @@ public class CodeQuest : MonoBehaviour
     [Header("關聯物件")]
     public GameObject relatedObject;
 
+    GameObject FinalBlock;
+
     public void OnNumberClick(int number)//按下數字鍵
     {
         if(resultText.text.Length < 4)
@@ -42,6 +44,12 @@ public class CodeQuest : MonoBehaviour
                 case "BigScreen":
                     relatedObject.GetComponent<Animator>().SetBool("isEnable", true);
                     break;
+                case "Final":
+                    resultText.text = "Error";
+                    relatedObject.GetComponent<Animator>().SetBool("isEnable", false);
+                    FinalBlock.SetActive(true);
+                    GameObject.Find("FinalRedLight").GetComponent<Animator>().SetBool("isEnable", true);
+                    break;
             }
         }
         else
@@ -50,10 +58,22 @@ public class CodeQuest : MonoBehaviour
 
             switch (questName)
             {
-                case "Morse"://臨時用亂抓，建議改
+                case "Morse"://物件改名時會出錯
                     GameObject.Find("MorseLight").GetComponent<Animator>().SetTrigger("error");
                     break;
             }
+        }
+    }
+
+    void Awake()
+    {
+        switch (questName)
+        {
+            case "Final":
+                relatedObject.GetComponent<Animator>().SetBool("isEnable", true);
+                FinalBlock = GameObject.Find("FinalBlock");
+                FinalBlock.SetActive(false);
+                break;
         }
     }
 }
