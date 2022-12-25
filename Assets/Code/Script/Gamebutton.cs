@@ -14,6 +14,16 @@ public class Gamebutton : MonoBehaviour
     {
         Application.Quit();//����C��
     }
+    public void ToMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+    public void ToCredit()
+    {
+        SceneManager.LoadScene(2);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
 
     // Start is called before the first frame update
     void Awake()

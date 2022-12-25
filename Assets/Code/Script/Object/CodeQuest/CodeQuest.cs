@@ -49,6 +49,7 @@ public class CodeQuest : MonoBehaviour
                     relatedObject.GetComponent<Animator>().SetBool("isEnable", false);
                     FinalBlock.SetActive(true);
                     GameObject.Find("FinalRedLight").GetComponent<Animator>().SetBool("isEnable", true);
+                    GameObject.Find("Black").GetComponent<Animator>().SetBool("isEnable", true);
                     break;
             }
         }
